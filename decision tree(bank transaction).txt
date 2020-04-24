@@ -1,0 +1,27 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+bank=pd.read_csv('../input/bank.csv')
+bank.head()
+bank[bank.isnull().any(axis=1)].count()
+bank.describe()
+g = sns.boxplot(x=bank["age"])
+sns.distplot(bank.age, bins=100)
+g = sns.boxplot(x=bank["duration"])
+sns.distplot(bank.duration, bins=100)
+bank_data = bank.copy()
+jobs = ['management','blue-collar','technician','admin.','services','retired','self-employed','student',\
+        'unemployed','entrepreneur','housemaid','unknown']
+
+for j in jobs:
+    print("{:15} : {:5}". format(j, len(bank_data[(bank_data.deposit == "yes") & (bank_data.job ==j)])))
+bank_data.job.value_counts()
+bank_data['job'] = bank_data['job'].replace(['management', 'admin.'], 'white-collar')
+bank_data['job'] = bank_data['job'].replace(['services','housemaid'], 'pink-collar')
+bank_data['job'] = bank_data['job'].replace(['retired', 'student', 'unemployed', 'unknown'], 'other')
+bank_data.job.value_counts()
+bank_data['poutcome'] = bank_data['poutcome'].replace(['other'] , 'unknown')
+bank_data.poutcome.value_counts()
+
